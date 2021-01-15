@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
+use App\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Constraints\Email;
@@ -16,11 +17,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserController extends AbstractController
 {
-    private $encoder;
+    private $service;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserService $userService)
     {
-        $this->encoder = $passwordEncoder;
+        $this->service = $userService;
     }
 
     #[Route('/welcome', name: 'welcome')]
@@ -39,18 +40,12 @@ class UserController extends AbstractController
     public function register(Request $request): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $userData = $request->request->get('form');
 
-        if ($userData['password'] === $userData['confirm_password']) {
-            $user = new User;
-            $user->setName($userData['name']);
-            $user->setEmail($userData['email']);
-            $user->setPassword($this->encoder->encodePassword($user, $userData['password']));
-            $user->setRoles(['admin']);
-            $entityManager->persist($user);
-            $entityManager->flush();
+        $user = $this->service->register($request->request->all());
 
-            return new Response('User ' . $user->getName() . ' successfully registered');
-        }
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $this->redirect('/');
     }
 }
