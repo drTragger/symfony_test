@@ -4,6 +4,7 @@
 namespace App\Service;
 
 
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\User;
@@ -12,12 +13,12 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserService
 {
     protected $encoder;
-    protected $em;
+    protected $repository;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserRepository $repository)
     {
         $this->encoder = $passwordEncoder;
-        $this->em = $entityManager;
+        $this->repository = $repository;
     }
 
     public function register(array $userData)
@@ -28,8 +29,7 @@ class UserService
             $user->setEmail($userData['email']);
             $user->setPassword($this->encoder->encodePassword($user, $userData['password']));
             $user->setRoles(['admin']);
-            $this->em->persist($user);
-            $this->em->flush();
+            $this->repository->saveUser($user);
         }
     }
 }
