@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4029167d-2d67-4d63-81ad-d5cfdb3f998b" name="Default Changelist" comment="Removed comments">
+    <list default="true" id="4029167d-2d67-4d63-81ad-d5cfdb3f998b" name="Default Changelist" comment="Moved flush and persist to the repository">
+      <change afterPath="$PROJECT_DIR$/migrations/Version20210118070602.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Entity/ResetPassword.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Repository/ResetPasswordRepository.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/emails/reset-password.html.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/security/new_password.html.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/security/password-reset.html.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/security/success.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/UserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/UserRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/routes.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UserController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Service/UserService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/UserService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/security/login.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/security/login.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,7 +188,8 @@
       <workItem from="1610616149478" duration="5503000" />
       <workItem from="1610721158647" duration="194000" />
       <workItem from="1610721369317" duration="683000" />
-      <workItem from="1610780896506" duration="2349000" />
+      <workItem from="1610780896506" duration="14125000" />
+      <workItem from="1610953334998" duration="8940000" />
     </task>
     <task id="LOCAL-00001" summary="Made a possibility to login and register">
       <created>1610717081984</created>
@@ -206,7 +219,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610782797636</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Moved flush and persist to the repository">
+      <created>1610783455716</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1610783455716</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -230,7 +250,8 @@
     <MESSAGE value="Moved all logic from controller to service" />
     <MESSAGE value="Moved repository usage to the service" />
     <MESSAGE value="Removed comments" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed comments" />
+    <MESSAGE value="Moved flush and persist to the repository" />
+    <option name="LAST_COMMIT_MESSAGE" value="Moved flush and persist to the repository" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
