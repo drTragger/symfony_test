@@ -4,18 +4,16 @@
 namespace App\Service;
 
 
-use App\Entity\ResetPassword;
+use App\Entity\Token;
 use App\Repository\ResetPasswordRepository;
+use App\Repository\TokenRepository;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
+use DateTime;
 use App\Entity\User;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserService
 {
@@ -23,13 +21,15 @@ class UserService
     protected UserRepository $userRepository;
     protected MailerInterface $mailer;
     protected ResetPasswordRepository $passwordRepository;
+    protected TokenRepository $tokenRepository;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepository, MailerInterface $mailer, ResetPasswordRepository $passwordRepository)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepository, MailerInterface $mailer, ResetPasswordRepository $passwordRepository, TokenRepository $tokenRepository)
     {
         $this->encoder = $passwordEncoder;
         $this->userRepository = $userRepository;
         $this->mailer = $mailer;
         $this->passwordRepository = $passwordRepository;
+        $this->tokenRepository = $tokenRepository;
     }
 
     public function register(array $userData)
@@ -46,9 +46,15 @@ class UserService
 
     public function sendURL(string $email)
     {
-        $user = $this->checkByEmail($email);
+        $user = $this->getUserByEmail($email);
 
-        $url = 'http://symfony.test/password/new_password/' . $user->getId();
+        $token = new Token;
+        $token->setToken($this->generateToken());
+        $token->setUserId($user->getId());
+        $token->setCreatedAt(new DateTime());
+        $this->tokenRepository->saveToken($token);
+
+        $url = 'http://symfony.test/password/new_password/' . $token->getToken();
 
         if ($user) {
             $email = (new TemplatedEmail())
@@ -62,7 +68,7 @@ class UserService
         }
     }
 
-    protected function checkByEmail(string $email): ?User
+    protected function getUserByEmail(string $email): ?User
     {
         return $this->userRepository->findOneBy(['email' => $email]);
     }
@@ -72,10 +78,16 @@ class UserService
         return $this->userRepository->findOneBy(['id' => $id]);
     }
 
+    protected function generateToken(): string
+    {
+        return rtrim(strtr(base64_encode(random_bytes(10)), '+/', '-_'), '=');
+    }
+
     public function resetPassword($request)
     {
-        $user = $this->getUserById($request->get('id'));
-        if ($request->get('password') === $request->get('c_password')) {
+        $token = $this->tokenRepository->findOneBy(['token' => $request->get('token')]);
+        $user = $this->getUserById($token->getUserId());
+        if ($request->get('password') === $request->get('c_password') && $token) {
             $this->userRepository->upgradePassword($user, $this->encoder->encodePassword($user, $request->get('password')));
             return true;
         }

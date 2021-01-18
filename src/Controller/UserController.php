@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,17 +50,17 @@ class UserController extends AbstractController
         return $this->render('security/success.html.twig', ['email' => $request->request->get('email')]);
     }
 
-    #[Route('/password/new_password/{id}', name: 'new_password_page')]
-    public function newPassword(int $id)
+    #[Route('/password/new_password/{token}', name: 'new_password_page')]
+    public function newPassword(string $token)
     {
-        return $this->render('security/new_password.html.twig', ['id' => $id]);
+        return $this->render('security/new_password.html.twig', ['token' => $token]);
     }
 
     #[Route('/password/reset', name: 'reset_password')]
     public function resetPassword(Request $request)
     {
         if ($this->service->resetPassword($request->request)) {
-            $this->redirect('/');
+            return $this->redirect('/');
         }
         echo 'Error occurred';
     }

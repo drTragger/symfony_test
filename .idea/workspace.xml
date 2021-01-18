@@ -2,7 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4029167d-2d67-4d63-81ad-d5cfdb3f998b" name="Default Changelist" comment="Removed unused class">
+    <list default="true" id="4029167d-2d67-4d63-81ad-d5cfdb3f998b" name="Default Changelist" comment="Moved flush and persist to the repository">
+      <change afterPath="$PROJECT_DIR$/migrations/Version20210118070602.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Entity/ResetPassword.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Repository/ResetPasswordRepository.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/emails/reset-password.html.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/security/new_password.html.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/security/password-reset.html.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/security/success.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/routes.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/UserService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/UserService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/security/login.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/security/login.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,7 +190,7 @@
       <workItem from="1610721158647" duration="194000" />
       <workItem from="1610721369317" duration="683000" />
       <workItem from="1610780896506" duration="14125000" />
-      <workItem from="1610953334998" duration="10971000" />
+      <workItem from="1610953334998" duration="9862000" />
     </task>
     <task id="LOCAL-00001" summary="Made a possibility to login and register">
       <created>1610717081984</created>
@@ -219,14 +234,7 @@
       <option name="project" value="LOCAL" />
       <updated>1610964947673</updated>
     </task>
-    <task id="LOCAL-00007" summary="Removed unused class">
-      <created>1610965944306</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1610965944306</updated>
-    </task>
-    <option name="localTasksCounter" value="8" />
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -252,8 +260,7 @@
     <MESSAGE value="Removed comments" />
     <MESSAGE value="Moved flush and persist to the repository" />
     <MESSAGE value="Made a feature to reset password" />
-    <MESSAGE value="Removed unused class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed unused class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made a feature to reset password" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
