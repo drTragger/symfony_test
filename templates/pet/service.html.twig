@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Services{% endblock %}
+
+{% block body %}
+    <form action="{{ path('add_service') }}" method="post">
+        <input type="hidden" name="user" value="{{ user }}">
+        <div>
+            <label for="service">Select a service</label>
+            <select name="service" id="service">
+                <option value="null" selected disabled>Select</option>
+                {% for service in services %}
+                    <option value="{{ service.id }}">{{ service.type }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="pet">Select a pet</label>
+            <select name="pet" id="pet">
+                <option value="null" selected disabled>Select</option>
+                {% for animal in animals %}
+                    <option value="{{ animal.id }}">{{ animal.breed.breed }}&nbsp;{{ animal.type.type }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="date">Select a date</label>
+            <input type="datetime-local" name="date" id="date">
+        </div>
+        <button type="submit">Register</button>
+    </form>
+{% endblock %}

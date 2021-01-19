@@ -4,12 +4,9 @@
 namespace App\Service;
 
 
-use App\Entity\Token;
-use App\Repository\ResetPasswordRepository;
-use App\Repository\TokenRepository;
-use App\Repository\UserRepository;
+use App\Entity\{Token, User};
+use App\Repository\{TokenRepository, UserRepository};
 use DateTime;
-use App\Entity\User;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -30,7 +27,7 @@ class UserService
         $this->tokenRepository = $tokenRepository;
     }
 
-    public function register(array $userData)
+    public function register(array $userData): bool
     {
         if ($userData['password'] === $userData['confirm_password']) {
             $user = new User;
@@ -46,22 +43,24 @@ class UserService
             $user->setRoles($user->getRoles());
             $user->setPassword($this->encoder->encodePassword($user, $userData['password']));
             $this->userRepository->saveUser($user);
+            return true;
         }
+        return false;
     }
 
-    public function sendURL(string $email)
+    public function sendURL(string $email): bool
     {
         $user = $this->getUserByEmail($email);
 
-        $token = new Token;
-        $token->setToken($this->generateToken());
-        $token->setUserId($user->getId());
-        $token->setCreatedAt(new DateTime());
-        $this->tokenRepository->saveToken($token);
-
-        $url = 'http://symfony.test/password/new_password/' . $token->getToken();
-
         if ($user) {
+            $token = new Token;
+            $token->setToken($this->generateToken());
+            $token->setUserId($user->getId());
+            $token->setCreatedAt(new DateTime());
+            $this->tokenRepository->saveToken($token);
+
+            $url = 'http://symfony.test/password/new_password/' . $token->getToken();
+
             $email = (new TemplatedEmail())
                 ->from('misha@andersenlab.com')
                 ->to(new Address($user->getEmail(), $user->getFirstName()))
@@ -70,7 +69,9 @@ class UserService
                 ->context(['url' => $url]);
 
             $this->mailer->send($email);
+            return true;
         }
+        return false;
     }
 
     protected function getUserByEmail(string $email): ?User
@@ -88,7 +89,7 @@ class UserService
         return rtrim(strtr(base64_encode(random_bytes(10)), '+/', '-_'), '=');
     }
 
-    public function resetPassword($request)
+    public function resetPassword($request): bool
     {
         $token = $this->tokenRepository->findOneBy(['token' => $request->get('token')]);
         $user = $this->getUserById($token->getUserId());

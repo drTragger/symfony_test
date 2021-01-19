@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,36 +33,36 @@ class UserController extends AbstractController
     #[Route('/users', name: 'register')]
     public function register(Request $request): Response
     {
-        $this->service->register($request->request->all());
-
-        return $this->redirect('/');
+        return $this->service->register($request->request->all())
+            ? $this->redirect('/welcome')
+            : $this->render('error.html.twig', ['message' => 'Passwords are not similar']);
     }
 
     #[Route('/password', name: 'reset_page')]
-    public function getEmailFromUser()
+    public function getEmailFromUser(): Response
     {
         return $this->render('security/password-reset.html.twig');
     }
 
     #[Route('/password/url', name: 'send_url')]
-    public function sendURL(Request $request)
+    public function sendURL(Request $request): Response
     {
-        $this->service->sendURL($request->request->get('email'));
-        return $this->render('security/success.html.twig', ['email' => $request->request->get('email')]);
+        return $this->service->sendURL($request->request->get('email'))
+            ? $this->render('security/success.html.twig', ['email' => $request->request->get('email')])
+            : $this->render('error.html.twig', ['message' => 'User not found']);
     }
 
     #[Route('/password/new_password/{token}', name: 'new_password_page')]
-    public function newPassword(string $token)
+    public function newPassword(string $token): Response
     {
         return $this->render('security/new_password.html.twig', ['token' => $token]);
     }
 
     #[Route('/password/reset', name: 'reset_password')]
-    public function resetPassword(Request $request)
+    public function resetPassword(Request $request): RedirectResponse|Response
     {
-        if ($this->service->resetPassword($request->request)) {
-            return $this->redirect('/');
-        }
-        echo 'Error occurred';
+        return $this->service->resetPassword($request->request)
+            ? $this->redirect('/')
+            : $this->render('error.html.twig', ['message' => 'Passwords are not similar']);
     }
 }

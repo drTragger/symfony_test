@@ -3,25 +3,26 @@
 
 namespace App\Service;
 
-use App\Entity\Pet;
-use App\Repository\PetBreedRepository;
-use App\Repository\PetRepository;
-use App\Repository\PetTypeRepository;
+use App\Entity\{Pet, UserService};
+use App\Repository\{PetBreedRepository, PetRepository, PetTypeRepository, ServiceRepository, UserServiceRepository};
+use DateTime;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
-use App\Entity\User;
 
 class PetService
 {
     protected PetTypeRepository $petTypeRepository;
     protected PetBreedRepository $petBreedRepository;
-    protected $petRepository;
+    protected PetRepository $petRepository;
+    protected ServiceRepository $serviceRepository;
+    protected UserServiceRepository $userServiceRepository;
 
-    public function __construct(PetTypeRepository $petTypeRepository, PetBreedRepository $petBreedRepository, PetRepository $petRepository)
+    public function __construct(PetTypeRepository $petTypeRepository, PetBreedRepository $petBreedRepository, PetRepository $petRepository, ServiceRepository $serviceRepository, UserServiceRepository $userServiceRepository)
     {
         $this->petTypeRepository = $petTypeRepository;
         $this->petBreedRepository = $petBreedRepository;
         $this->petRepository = $petRepository;
+        $this->serviceRepository = $serviceRepository;
+        $this->userServiceRepository = $userServiceRepository;
     }
 
     public function getTypes(): array
@@ -31,10 +32,10 @@ class PetService
 
     public function getBreeds(): array
     {
-        return $breeds = $this->petBreedRepository->findAll();
+        return $this->petBreedRepository->findAll();
     }
 
-    public function addPet(Request $request)
+    public function addPet(Request $request): bool
     {
         $type = $this->petTypeRepository->findOneBy(['type' => $request->request->get('type')]);
         $breed = $this->petBreedRepository->findOneBy(['breed' => $request->request->get('breed')]);
@@ -50,5 +51,36 @@ class PetService
             return true;
         }
         return false;
+    }
+
+    public function getServices(): array
+    {
+        return $this->serviceRepository->findAll();
+    }
+
+    public function getPets($userId): array
+    {
+        $pets = $this->petRepository->findBy(['owner_id' => $userId]);
+
+        $animals = [];
+        foreach ($pets as $key => $pet) {
+            $animals[$key]['id'] = $pet->getId();
+            $animals[$key]['type'] = $this->petTypeRepository->findOneBy(['id' => $pet->getTypeId()]);
+            $animals[$key]['breed'] = $this->petBreedRepository->findOneBy(['id' => $pet->getBreedId()]);
+        }
+
+        return $animals;
+    }
+
+    public function registerForService(Request $request)
+    {
+        $date = date('Y-m-d H:i:s', strtotime($request->get('date')));
+        $date = new DateTime($date);
+        $userService = new UserService();
+        $userService->setPetId($request->get('pet'));
+        $userService->setUserId($request->get('user'));
+        $userService->setServiceId($request->get('service'));
+        $userService->setDate($date);
+        $this->userServiceRepository->saveUserService($userService);
     }
 }
