@@ -10,7 +10,7 @@ use App\Service\UserService;
 
 class UserController extends AbstractController
 {
-    private $service;
+    private UserService $service;
 
     public function __construct(UserService $userService)
     {
