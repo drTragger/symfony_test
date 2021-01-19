@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pets{% endblock %}
+
+{% block body %}
+    {% if message is defined %}
+        <p>{{ message }}</p>
+    {% endif %}
+    <form action="{{ path('add_pet') }}" method="post">
+        <input type="hidden" name="userId" value="{{ userId }}">
+        <div>
+            <label for="type">Select type</label>
+            <select name="type" id="type" autofocus>
+                <option value="null" selected disabled>Select</option>
+                {% for type in types %}
+                    <option value="{{ type.type }}">{{ type.type }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="breed">Select Breed</label>
+            <select name="breed" id="breed">
+                <option value="null" selected disabled>Select</option>
+                {% for breed in breeds %}
+                    <option value="{{ breed.breed }}">{{ breed.breed }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit">Add a pet</button>
+    </form>
+{% endblock %}

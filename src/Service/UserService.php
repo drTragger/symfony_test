@@ -20,15 +20,13 @@ class UserService
     protected UserPasswordEncoderInterface $encoder;
     protected UserRepository $userRepository;
     protected MailerInterface $mailer;
-    protected ResetPasswordRepository $passwordRepository;
     protected TokenRepository $tokenRepository;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepository, MailerInterface $mailer, ResetPasswordRepository $passwordRepository, TokenRepository $tokenRepository)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepository, MailerInterface $mailer, TokenRepository $tokenRepository)
     {
         $this->encoder = $passwordEncoder;
         $this->userRepository = $userRepository;
         $this->mailer = $mailer;
-        $this->passwordRepository = $passwordRepository;
         $this->tokenRepository = $tokenRepository;
     }
 
@@ -36,10 +34,17 @@ class UserService
     {
         if ($userData['password'] === $userData['confirm_password']) {
             $user = new User;
-            $user->setName($userData['name']);
+            $user->setFirstName($userData['first_name']);
+            $user->setLastName($userData['last_name']);
             $user->setEmail($userData['email']);
+            $user->setPhone($userData['phone']);
+            if (isset($userData['is_master'])) {
+                $user->setIsMaster(true);
+            } else {
+                $user->setIsMaster(false);
+            }
+            $user->setRoles($user->getRoles());
             $user->setPassword($this->encoder->encodePassword($user, $userData['password']));
-            $user->setRoles(['admin']);
             $this->userRepository->saveUser($user);
         }
     }
@@ -59,7 +64,7 @@ class UserService
         if ($user) {
             $email = (new TemplatedEmail())
                 ->from('misha@andersenlab.com')
-                ->to(new Address($user->getEmail(), $user->getName()))
+                ->to(new Address($user->getEmail(), $user->getFirstName()))
                 ->subject('Password reset link')
                 ->htmlTemplate('emails/reset-password.html.twig')
                 ->context(['url' => $url]);
