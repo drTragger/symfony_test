@@ -10,11 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PetController extends AbstractController
 {
-    protected PetService $service;
-
-    public function __construct(PetService $petService)
+    public function __construct(protected PetService $service)
     {
-        $this->service = $petService;
     }
 
     #[Route('/pets', name: 'pets')]
@@ -44,9 +41,10 @@ class PetController extends AbstractController
             'user' => $this->getUser()->getId(),
         ]);
     }
-     #[Route('/pets/services/add', name: 'add_service')]
+
+    #[Route('/pets/services/add', name: 'add_service')]
     public function addService(Request $request): RedirectResponse
-     {
+    {
         $this->service->registerForService($request);
         return $this->redirect('/welcome');
     }

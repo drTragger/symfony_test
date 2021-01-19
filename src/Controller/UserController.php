@@ -2,8 +2,7 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\{RedirectResponse, Request};
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,11 +10,8 @@ use App\Service\UserService;
 
 class UserController extends AbstractController
 {
-    private UserService $service;
-
-    public function __construct(UserService $userService)
+    public function __construct(protected UserService $service)
     {
-        $this->service = $userService;
     }
 
     #[Route('/welcome', name: 'welcome')]

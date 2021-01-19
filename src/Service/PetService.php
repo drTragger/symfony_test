@@ -10,19 +10,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PetService
 {
-    protected PetTypeRepository $petTypeRepository;
-    protected PetBreedRepository $petBreedRepository;
-    protected PetRepository $petRepository;
-    protected ServiceRepository $serviceRepository;
-    protected UserServiceRepository $userServiceRepository;
-
-    public function __construct(PetTypeRepository $petTypeRepository, PetBreedRepository $petBreedRepository, PetRepository $petRepository, ServiceRepository $serviceRepository, UserServiceRepository $userServiceRepository)
+    public function __construct(
+        protected PetTypeRepository $petTypeRepository,
+        protected PetBreedRepository $petBreedRepository,
+        protected PetRepository $petRepository,
+        protected ServiceRepository $serviceRepository,
+        protected UserServiceRepository $userServiceRepository)
     {
-        $this->petTypeRepository = $petTypeRepository;
-        $this->petBreedRepository = $petBreedRepository;
-        $this->petRepository = $petRepository;
-        $this->serviceRepository = $serviceRepository;
-        $this->userServiceRepository = $userServiceRepository;
     }
 
     public function getTypes(): array

@@ -3,7 +3,6 @@
 
 namespace App\Service;
 
-
 use App\Entity\{Token, User};
 use App\Repository\{TokenRepository, UserRepository};
 use DateTime;
@@ -14,17 +13,12 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 class UserService
 {
-    protected UserPasswordEncoderInterface $encoder;
-    protected UserRepository $userRepository;
-    protected MailerInterface $mailer;
-    protected TokenRepository $tokenRepository;
-
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepository, MailerInterface $mailer, TokenRepository $tokenRepository)
+    public function __construct(
+        protected UserPasswordEncoderInterface $encoder,
+        protected UserRepository $userRepository,
+        protected MailerInterface $mailer,
+        protected TokenRepository $tokenRepository)
     {
-        $this->encoder = $passwordEncoder;
-        $this->userRepository = $userRepository;
-        $this->mailer = $mailer;
-        $this->tokenRepository = $tokenRepository;
     }
 
     public function register(array $userData): bool
