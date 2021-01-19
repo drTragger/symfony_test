@@ -1,6 +1,30 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+registration_page:
+  path: /registration
+  controller: App\Controller\UserController::registration
+
+reset_page:
+  path: /password
+  controller: App\Controller\UserController::getEmailFromUser
+
 send_url:
   path: /password/send
   controller: App\Controller\UserController::sendURL
+
+reset_password:
+  path: /password/reset
+  controller: App\Controller\UserController::resetPassword
+
+pets:
+  path: /pets
+  controller: App\Controller\PetController::index
+
+add_pet:
+  path: /pets/add
+  controller: App\Controller\PetController::addPet
+
+add_service:
+  path: /pets/services/add
+  controller: App\Controller\PetController::addService
