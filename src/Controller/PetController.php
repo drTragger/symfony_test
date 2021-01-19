@@ -17,11 +17,13 @@ class PetController extends AbstractController
     #[Route('/pets', name: 'pets')]
     public function index(): Response
     {
-        return $this->render('pet/index.html.twig', [
-            'types' => $this->service->getTypes(),
-            'breeds' => $this->service->getBreeds(),
-            'userId' => $this->getUser()->getId(),
-        ]);
+        return $this->getUser()
+            ? $this->render('pet/index.html.twig', [
+                'types' => $this->service->getTypes(),
+                'breeds' => $this->service->getBreeds(),
+                'userId' => $this->getUser()->getId(),
+            ])
+            : $this->render('error.html.twig', ['message' => 'You need to log in to see this page']);
     }
 
     #[Route('/pets/add', name: 'add_pet')]

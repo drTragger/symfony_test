@@ -40,7 +40,7 @@ class UserController extends AbstractController
         return $this->render('security/password-reset.html.twig');
     }
 
-    #[Route('/password/url', name: 'send_url')]
+    #[Route('/password/send', name: 'send_url')]
     public function sendURL(Request $request): Response
     {
         return $this->service->sendURL($request->request->get('email'))
