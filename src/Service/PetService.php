@@ -70,12 +70,18 @@ class PetService
     {
         $date = date('Y-m-d H:i:s', strtotime($request->get('date')));
         $date = new DateTime($date);
-        $userService = new UserService();
-        $userService->setPetId($request->get('pet'));
-        $userService->setUserId($request->get('user'));
-        $userService->setServiceId($request->get('service'));
-        $userService->setDate($date);
-        $this->userServiceRepository->saveUserService($userService);
+
+        if ($date > new DateTime()) {
+            $userService = new UserService();
+            $userService->setPetId($request->get('pet'));
+            $userService->setUserId($request->get('user'));
+            $userService->setServiceId($request->get('service'));
+            $userService->setDate($date);
+            $this->userServiceRepository->saveUserService($userService);
+
+            return true;
+        }
+        return false;
     }
 
     public function showServices($user)
@@ -93,9 +99,7 @@ class PetService
                     $animals[$key]['price'] = $serviceInfo->getPrice();
                     $animals[$key]['date'] = $service->getDate()->format('H:i d.m.Y ');
                 }
-                return isset($animals)
-                    ? $animals
-                    : 1;
+                return $animals ?? 1;
             }
             return 1;
         }

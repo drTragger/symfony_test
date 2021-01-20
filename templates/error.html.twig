@@ -6,5 +6,10 @@
     <div class="vertical">
         <h2>Whoops! Looks like something went wrong</h2>
         <p>{{ message }}</p>
+        {% if app.user is defined %}
+            <a href="/">Log in</a>
+        {% else %}
+            <a href="{{ app.request.headers.get('referer') }}" class="btn btn-danger">Back</a>
+        {% endif %}
     </div>
 {% endblock %}

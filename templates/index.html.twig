@@ -5,5 +5,10 @@
 {% block body %}
     <div class="vertical">
         <h2>Welcome page</h2>
+        <div class="links">
+            <a href="{{ path('pets') }}">Add a pet</a>
+            <a href="{{ path('pets_services') }}">Register a pet for a service</a>
+            <a href="{{ path('show_services') }}">Your services</a>
+        </div>
     </div>
 {% endblock %}

@@ -28,3 +28,11 @@ add_pet:
 add_service:
   path: /pets/services/add
   controller: App\Controller\PetController::addService
+
+pets_services:
+  path: /pets/services/creation
+  controller: App\Controller\PetController::services
+
+show_services:
+  path: /pets/services
+  controller: App\Controller\PetController::showServices

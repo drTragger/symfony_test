@@ -29,35 +29,44 @@ class PetController extends AbstractController
     public function addPet(Request $request): RedirectResponse|Response
     {
         return $this->service->addPet($request)
-            ? $this->redirectToRoute('pets')
+            ? $this->redirect('/welcome')
             : $this->render('error.html.twig', ['message' => 'You might have chosen wrong breed for the animal type']);
     }
 
     #[Route('/pets/services/creation', name: 'pets_services')]
     public function services(): Response
     {
-        return $this->render('pet/service.html.twig', [
-            'services' => $this->service->getServices(),
-            'animals' => $this->service->getPets($this->getUser()->getId()),
-            'user' => $this->getUser()->getId(),
-        ]);
+        return $this->getUser()
+            ? $this->render('pet/service.html.twig', [
+                'services' => $this->service->getServices(),
+                'animals' => $this->service->getPets($this->getUser()->getId()),
+                'user' => $this->getUser()->getId(),
+            ])
+            : $this->render('error.html.twig', ['message' => 'You need to log in to see this page']);
     }
 
     #[Route('/pets/services/add', name: 'add_service')]
-    public function addService(Request $request): RedirectResponse
+    public function addService(Request $request): RedirectResponse|Response
     {
-        $this->service->registerForService($request);
-        return $this->redirect('/welcome');
+        return $this->service->registerForService($request)
+            ? $this->redirect('/welcome')
+            : $this->render('error.html.twig', ['message' => 'The date you have chosen already expired']);
     }
 
     #[Route('/pets/services', name: 'show_services')]
-    public function showServices()
+    public function showServices(): Response
     {
         $services = $this->service->showServices($this->getUser());
+
+        $total = 0;
+        foreach ($services as $service) {
+            $total += $service['price'];
+        }
+
         return match ($services) {
             1 => $this->render('pet/services.html.twig', ['message' => 'You have no registered services']),
             2 => $this->render('error.html.twig', ['message' => 'You need to log in to see this page']),
-            default => $this->render('pet/services.html.twig', ['services' => $services]),
+            default => $this->render('pet/services.html.twig', ['services' => $services, 'total' => $total]),
         };
     }
 }

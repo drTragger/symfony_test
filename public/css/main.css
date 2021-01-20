@@ -6,6 +6,10 @@
     align-items: center;
 }
 
+.form-group {
+    min-width: 15vw;
+}
+
 .vertical button {
     width: 40%;
     display: block;
@@ -18,4 +22,25 @@
 
 .services {
     width: 80%;
+}
+
+.links {
+    margin-top: 2rem;
+}
+
+.links a:not(:first-of-type) {
+    padding-left: 1rem;
+    border-left: 1px solid black;
+}
+
+.links a:not(:last-of-type) {
+    padding-right: 1rem;
+}
+
+.total {
+    align-self: flex-start;
+    width: 80%;
+    display: block;
+    margin: 0 auto;
+    text-decoration: underline;
 }
