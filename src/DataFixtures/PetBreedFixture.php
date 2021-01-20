@@ -27,7 +27,7 @@ class PetBreedFixture extends Fixture
             foreach ($breeds as $breed) {
                 $petBreed = new PetBreed();
                 $petBreed->setBreed($breed);
-                $petBreed->setType($key);
+                $petBreed->setType($key + 1);
                 $manager->persist($petBreed);
             }
         }

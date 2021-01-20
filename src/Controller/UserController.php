@@ -30,7 +30,7 @@ class UserController extends AbstractController
     public function register(Request $request): Response
     {
         return $this->service->register($request->request->all())
-            ? $this->redirect('/welcome')
+            ? $this->redirect('/')
             : $this->render('error.html.twig', ['message' => 'Passwords are not similar']);
     }
 
