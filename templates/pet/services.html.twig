@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Services{% endblock %}
+
+{% block body %}
+    <div class="vertical">
+    {% if message is defined %}
+        <p>{{ message }}</p>
+    {% else %}
+        <table class="table table-striped services">
+            <thead>
+            <tr>
+                <th>Service name</th>
+                <th>Pet</th>
+                <th>Price</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for service in services %}
+                <tr>
+                    <td>{{ service.name }}</td>
+                    <td>{{ service.petBreed }}&nbsp;{{ service.petType }}</td>
+                    <td>{{ service.price }}$</td>
+                    <td>{{ service.date }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    {% endif %}
+{% endblock %}

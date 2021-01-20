@@ -4,8 +4,7 @@ namespace App\Controller;
 
 use App\Service\PetService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\{Request, Response};
+use Symfony\Component\HttpFoundation\{Request, Response, RedirectResponse};
 use Symfony\Component\Routing\Annotation\Route;
 
 class PetController extends AbstractController
@@ -34,7 +33,7 @@ class PetController extends AbstractController
             : $this->render('error.html.twig', ['message' => 'You might have chosen wrong breed for the animal type']);
     }
 
-    #[Route('/pets/services', name: 'pets_services')]
+    #[Route('/pets/services/creation', name: 'pets_services')]
     public function services(): Response
     {
         return $this->render('pet/service.html.twig', [
@@ -49,5 +48,16 @@ class PetController extends AbstractController
     {
         $this->service->registerForService($request);
         return $this->redirect('/welcome');
+    }
+
+    #[Route('/pets/services', name: 'show_services')]
+    public function showServices()
+    {
+        $services = $this->service->showServices($this->getUser());
+        return match ($services) {
+            1 => $this->render('pet/services.html.twig', ['message' => 'You have no registered services']),
+            2 => $this->render('error.html.twig', ['message' => 'You need to log in to see this page']),
+            default => $this->render('pet/services.html.twig', ['services' => $services]),
+        };
     }
 }

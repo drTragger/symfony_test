@@ -77,4 +77,28 @@ class PetService
         $userService->setDate($date);
         $this->userServiceRepository->saveUserService($userService);
     }
+
+    public function showServices($user)
+    {
+        if (isset($user)) {
+            $userServices = $this->userServiceRepository->findBy(['user_id' => $user->getId()]);
+
+            if (isset($userServices)) {
+                foreach ($userServices as $key => $service) {
+                    $pets[] = $this->petRepository->findOneBy(['id' => $service->getPetId()]);
+                    $serviceInfo = $this->serviceRepository->findOneBy(['id' => $service->getServiceId()]);
+                    $animals[]['petType'] = $this->petTypeRepository->findOneBy(['id' => $pets[$key]->getTypeId()])->getType();
+                    $animals[$key]['petBreed'] = $this->petBreedRepository->findOneBy(['id' => $pets[$key]->getBreedId()])->getBreed();
+                    $animals[$key]['name'] = $serviceInfo->getType();
+                    $animals[$key]['price'] = $serviceInfo->getPrice();
+                    $animals[$key]['date'] = $service->getDate()->format('H:i d.m.Y ');
+                }
+                return isset($animals)
+                    ? $animals
+                    : 1;
+            }
+            return 1;
+        }
+        return 2;
+    }
 }
